@@ -26,23 +26,26 @@ if ($item->anchor_rel)
     $attributes['rel'] = $item->anchor_rel;
 }
 
-$linktype = $item->title;
+$position = strpos($item->title, '||');
+$newTitle = substr($item->title, 0, $position - 1);
+$linktype = $newTitle;
 
-if ($item->menu_image)
+if ($item->menu_image && $module->id != 'menu-mobile')
 {
     if ($item->menu_image_css)
     {
-        $image_attributes['class'] = $item->menu_image_css;
-        $linktype = JHtml::_('image', $item->menu_image, $item->title, $image_attributes);
+		$image_attributes['class'] = $item->menu_image_css . ' svg';
+		$linktype = JHtml::_('image', $item->menu_image, $newTitle, $image_attributes);
     }
     else
     {
-        $linktype = JHtml::_('image', $item->menu_image, $item->title);
+		//$linktype = JHtml::_('image', $item->menu_image, $item->title);
+		$linktype = '<img src="' . $item->menu_image . '" alt="' . $newTitle . '" class="menuIcon svg">';
     }
 
     if ($item->params->get('menu_text', 1))
     {
-        $linktype .= '<span class="image-title">' . $item->title . '</span>';
+        $linktype .= '<span class="image-title">' . $newTitle . '</span>';
     }
 }
 
