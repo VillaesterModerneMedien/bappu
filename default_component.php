@@ -13,52 +13,48 @@ $attributes = array();
 
 if ($item->anchor_title)
 {
-	$attributes['title'] = $item->anchor_title;
+    $attributes['title'] = $item->anchor_title;
 }
 
 if ($item->anchor_css)
 {
-	$attributes['class'] = $item->anchor_css;
+    $attributes['class'] = $item->anchor_css;
 }
 
 if ($item->anchor_rel)
 {
-	$attributes['rel'] = $item->anchor_rel;
+    $attributes['rel'] = $item->anchor_rel;
 }
 
+$linktype = $item->title;
 
-$position = strpos($item->title, '||');
-$newTitle = substr($item->title, 0, $position - 1);
-$linktype = $newTitle;
-
-if ($item->menu_image && $module->id != 'menu-mobile')
+if ($item->menu_image)
 {
-	if ($item->menu_image_css)
-	{
-		$image_attributes['class'] = $item->menu_image_css . ' svg';
-		$linktype = JHtml::_('image', $item->menu_image, $newTitle, $image_attributes);
-	}
-	else
-	{
-		//$linktype = JHtml::_('image', $item->menu_image, $item->title);
-		$linktype = '<img src="' . $item->menu_image . '" alt="' . $newTitle . '" class="menuIcon svg">';
-	}
+    if ($item->menu_image_css)
+    {
+        $image_attributes['class'] = $item->menu_image_css;
+        $linktype = JHtml::_('image', $item->menu_image, $item->title, $image_attributes);
+    }
+    else
+    {
+        $linktype = JHtml::_('image', $item->menu_image, $item->title);
+    }
 
-	if ($item->params->get('menu_text', 1))
-	{
-		$linktype .= '<span class="image-title">' . $newTitle . '</span>';
-	}
+    if ($item->params->get('menu_text', 1))
+    {
+        $linktype .= '<span class="image-title">' . $item->title . '</span>';
+    }
 }
 
 if ($item->browserNav == 1)
 {
-	$attributes['target'] = '_blank';
+    $attributes['target'] = '_blank';
 }
 elseif ($item->browserNav == 2)
 {
-	$options = 'toolbar=no,location=no,status=no,menubar=no,scrollbars=yes,resizable=yes';
+    $options = 'toolbar=no,location=no,status=no,menubar=no,scrollbars=yes,resizable=yes';
 
-	$attributes['onclick'] = "window.open(this.href, 'targetWindow', '" . $options . "'); return false;";
+    $attributes['onclick'] = "window.open(this.href, 'targetWindow', '" . $options . "'); return false;";
 }
 
 echo JHtml::_('link', JFilterOutput::ampReplace(htmlspecialchars($item->flink, ENT_COMPAT, 'UTF-8', false)), $linktype, $attributes);
